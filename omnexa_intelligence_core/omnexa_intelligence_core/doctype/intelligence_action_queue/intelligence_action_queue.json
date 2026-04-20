@@ -1,0 +1,51 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "hash",
+ "creation": "2026-04-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "playbook_id",
+  "priority",
+  "status",
+  "approved_by",
+  "approved_on",
+  "source",
+  "payload_json",
+  "execution_log",
+  "last_error",
+  "executed_on",
+  "rollback_status",
+  "rollback_ref"
+ ],
+ "fields": [
+  {"fieldname": "title", "fieldtype": "Data", "label": "Title", "reqd": 1},
+  {"fieldname": "playbook_id", "fieldtype": "Data", "label": "Playbook ID"},
+  {"fieldname": "priority", "fieldtype": "Select", "label": "Priority", "options": "low\nmedium\nhigh\ncritical", "default": "medium"},
+  {"fieldname": "status", "fieldtype": "Select", "label": "Status", "options": "Pending Approval\nApproved\nQueued\nRunning\nSimulated\nExecuted\nFailed\nRejected\nCancelled", "default": "Pending Approval"},
+  {"fieldname": "approved_by", "fieldtype": "Link", "label": "Approved By", "options": "User"},
+  {"fieldname": "approved_on", "fieldtype": "Datetime", "label": "Approved On"},
+  {"fieldname": "source", "fieldtype": "Data", "label": "Source"},
+  {"fieldname": "payload_json", "fieldtype": "Long Text", "label": "Payload JSON"},
+  {"fieldname": "execution_log", "fieldtype": "Small Text", "label": "Execution Log"},
+  {"fieldname": "last_error", "fieldtype": "Small Text", "label": "Last Error"},
+  {"fieldname": "executed_on", "fieldtype": "Datetime", "label": "Executed On"},
+  {"fieldname": "rollback_status", "fieldtype": "Select", "label": "Rollback Status", "options": "Not Requested\nRequested\nRolled Back\nRollback Failed", "default": "Not Requested"},
+  {"fieldname": "rollback_ref", "fieldtype": "Data", "label": "Rollback Ref"}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-04-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Omnexa Intelligence Core",
+ "name": "Intelligence Action Queue",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}
+ ],
+ "sort_field": "creation",
+ "sort_order": "ASC",
+ "track_changes": 1
+}
