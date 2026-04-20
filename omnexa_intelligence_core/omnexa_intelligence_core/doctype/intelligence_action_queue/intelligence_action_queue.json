@@ -6,34 +6,137 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "identity_section",
   "title",
   "playbook_id",
+  "priority_section",
   "priority",
   "status",
   "approved_by",
   "approved_on",
+  "payload_section",
   "source",
   "payload_json",
   "execution_log",
   "last_error",
   "executed_on",
+  "rollback_section",
   "rollback_status",
-  "rollback_ref"
+  "rollback_ref",
+  "change_ticket",
+  "control_section",
+  "owner_user"
  ],
  "fields": [
-  {"fieldname": "title", "fieldtype": "Data", "label": "Title", "reqd": 1},
-  {"fieldname": "playbook_id", "fieldtype": "Data", "label": "Playbook ID"},
-  {"fieldname": "priority", "fieldtype": "Select", "label": "Priority", "options": "low\nmedium\nhigh\ncritical", "default": "medium"},
-  {"fieldname": "status", "fieldtype": "Select", "label": "Status", "options": "Pending Approval\nApproved\nQueued\nRunning\nSimulated\nExecuted\nFailed\nRejected\nCancelled", "default": "Pending Approval"},
-  {"fieldname": "approved_by", "fieldtype": "Link", "label": "Approved By", "options": "User"},
-  {"fieldname": "approved_on", "fieldtype": "Datetime", "label": "Approved On"},
-  {"fieldname": "source", "fieldtype": "Data", "label": "Source"},
-  {"fieldname": "payload_json", "fieldtype": "Long Text", "label": "Payload JSON"},
-  {"fieldname": "execution_log", "fieldtype": "Small Text", "label": "Execution Log"},
-  {"fieldname": "last_error", "fieldtype": "Small Text", "label": "Last Error"},
-  {"fieldname": "executed_on", "fieldtype": "Datetime", "label": "Executed On"},
-  {"fieldname": "rollback_status", "fieldtype": "Select", "label": "Rollback Status", "options": "Not Requested\nRequested\nRolled Back\nRollback Failed", "default": "Not Requested"},
-  {"fieldname": "rollback_ref", "fieldtype": "Data", "label": "Rollback Ref"}
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Action Identity"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "playbook_id",
+   "fieldtype": "Data",
+   "label": "Playbook ID"
+  },
+  {
+   "fieldname": "priority_section",
+   "fieldtype": "Section Break",
+   "label": "Priority and Approval"
+  },
+  {
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "label": "Priority",
+   "options": "low\nmedium\nhigh\ncritical",
+   "default": "medium"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending Approval\nApproved\nQueued\nRunning\nSimulated\nExecuted\nFailed\nRejected\nCancelled",
+   "default": "Pending Approval"
+  },
+  {
+   "fieldname": "approved_by",
+   "fieldtype": "Link",
+   "label": "Approved By",
+   "options": "User"
+  },
+  {
+   "fieldname": "approved_on",
+   "fieldtype": "Datetime",
+   "label": "Approved On"
+  },
+  {
+   "fieldname": "payload_section",
+   "fieldtype": "Section Break",
+   "label": "Payload and Execution"
+  },
+  {
+   "fieldname": "source",
+   "fieldtype": "Data",
+   "label": "Source"
+  },
+  {
+   "fieldname": "payload_json",
+   "fieldtype": "Long Text",
+   "label": "Payload JSON"
+  },
+  {
+   "fieldname": "execution_log",
+   "fieldtype": "Small Text",
+   "label": "Execution Log"
+  },
+  {
+   "fieldname": "last_error",
+   "fieldtype": "Small Text",
+   "label": "Last Error"
+  },
+  {
+   "fieldname": "executed_on",
+   "fieldtype": "Datetime",
+   "label": "Executed On"
+  },
+  {
+   "fieldname": "rollback_section",
+   "fieldtype": "Section Break",
+   "label": "Rollback and Governance"
+  },
+  {
+   "fieldname": "rollback_status",
+   "fieldtype": "Select",
+   "label": "Rollback Status",
+   "options": "Not Requested\nRequested\nRolled Back\nRollback Failed",
+   "default": "Not Requested"
+  },
+  {
+   "fieldname": "rollback_ref",
+   "fieldtype": "Data",
+   "label": "Rollback Ref"
+  },
+  {
+   "fieldname": "change_ticket",
+   "fieldtype": "Data",
+   "label": "Change Ticket"
+  },
+  {
+   "fieldname": "control_section",
+   "fieldtype": "Section Break",
+   "label": "Control"
+  },
+  {
+   "fieldname": "owner_user",
+   "fieldtype": "Link",
+   "label": "Owner",
+   "options": "User"
+  }
  ],
  "index_web_pages_for_search": 0,
  "links": [],
@@ -43,7 +146,18 @@
  "name": "Intelligence Action Queue",
  "owner": "Administrator",
  "permissions": [
-  {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
  ],
  "sort_field": "creation",
  "sort_order": "ASC",

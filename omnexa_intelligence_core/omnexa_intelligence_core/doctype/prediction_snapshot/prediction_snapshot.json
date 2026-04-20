@@ -6,20 +6,79 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "identity_section",
   "metric",
   "horizon_days",
+  "forecast_section",
   "predicted_value",
   "confidence",
   "basis_note",
-  "as_of_date"
+  "as_of_date",
+  "reporting_tag",
+  "control_section",
+  "snapshot_reference"
  ],
  "fields": [
-  {"fieldname": "metric", "fieldtype": "Data", "label": "Metric", "reqd": 1},
-  {"fieldname": "horizon_days", "fieldtype": "Int", "label": "Horizon (days)", "reqd": 1, "default": "30"},
-  {"fieldname": "predicted_value", "fieldtype": "Float", "label": "Predicted Value", "reqd": 1},
-  {"fieldname": "confidence", "fieldtype": "Percent", "label": "Confidence"},
-  {"fieldname": "basis_note", "fieldtype": "Small Text", "label": "Basis Note"},
-  {"fieldname": "as_of_date", "fieldtype": "Date", "label": "As of Date", "default": "Today"}
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Prediction Identity"
+  },
+  {
+   "fieldname": "metric",
+   "fieldtype": "Data",
+   "label": "Metric",
+   "reqd": 1
+  },
+  {
+   "fieldname": "horizon_days",
+   "fieldtype": "Int",
+   "label": "Horizon (days)",
+   "reqd": 1,
+   "default": "30"
+  },
+  {
+   "fieldname": "forecast_section",
+   "fieldtype": "Section Break",
+   "label": "Forecast"
+  },
+  {
+   "fieldname": "predicted_value",
+   "fieldtype": "Float",
+   "label": "Predicted Value",
+   "reqd": 1
+  },
+  {
+   "fieldname": "confidence",
+   "fieldtype": "Percent",
+   "label": "Confidence"
+  },
+  {
+   "fieldname": "basis_note",
+   "fieldtype": "Small Text",
+   "label": "Basis Note"
+  },
+  {
+   "fieldname": "as_of_date",
+   "fieldtype": "Date",
+   "label": "As of Date",
+   "default": "Today"
+  },
+  {
+   "fieldname": "reporting_tag",
+   "fieldtype": "Data",
+   "label": "Reporting Tag"
+  },
+  {
+   "fieldname": "control_section",
+   "fieldtype": "Section Break",
+   "label": "Control"
+  },
+  {
+   "fieldname": "snapshot_reference",
+   "fieldtype": "Data",
+   "label": "Snapshot Reference"
+  }
  ],
  "index_web_pages_for_search": 0,
  "links": [],
@@ -29,7 +88,18 @@
  "name": "Prediction Snapshot",
  "owner": "Administrator",
  "permissions": [
-  {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
