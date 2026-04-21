@@ -1,113 +1,106 @@
 {
- "actions": [],
- "allow_rename": 0,
- "autoname": "hash",
- "creation": "2026-04-19 00:00:00.000000",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "identity_section",
-  "title",
-  "status",
-  "analysis_section",
-  "confidence",
-  "reason",
-  "expected_impact",
-  "action_route",
-  "owner_section",
-  "recommendation_owner",
-  "control_section",
-  "owner_user"
- ],
- "fields": [
-  {
-   "fieldname": "identity_section",
-   "fieldtype": "Section Break",
-   "label": "Recommendation Identity"
-  },
-  {
-   "fieldname": "title",
-   "fieldtype": "Data",
-   "label": "Title",
-   "reqd": 1
-  },
-  {
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "New\nViewed\nAccepted\nRejected\nDeferred",
-   "default": "New"
-  },
-  {
-   "fieldname": "analysis_section",
-   "fieldtype": "Section Break",
-   "label": "Analysis"
-  },
-  {
-   "fieldname": "confidence",
-   "fieldtype": "Percent",
-   "label": "Confidence"
-  },
-  {
-   "fieldname": "reason",
-   "fieldtype": "Small Text",
-   "label": "Reason"
-  },
-  {
-   "fieldname": "expected_impact",
-   "fieldtype": "Small Text",
-   "label": "Expected Impact"
-  },
-  {
-   "fieldname": "action_route",
-   "fieldtype": "Data",
-   "label": "Action Route"
-  },
-  {
-   "fieldname": "owner_section",
-   "fieldtype": "Section Break",
-   "label": "Ownership"
-  },
-  {
-   "fieldname": "recommendation_owner",
-   "fieldtype": "Link",
-   "label": "Recommendation Owner",
-   "options": "User"
-  },
-  {
-   "fieldname": "control_section",
-   "fieldtype": "Section Break",
-   "label": "Control"
-  },
-  {
-   "fieldname": "owner_user",
-   "fieldtype": "Link",
-   "label": "Owner",
-   "options": "User"
-  }
- ],
- "index_web_pages_for_search": 0,
- "links": [],
- "modified": "2026-04-19 00:00:00.000000",
- "modified_by": "Administrator",
- "module": "Omnexa Intelligence Core",
- "name": "Intelligence Recommendation",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
- "sort_field": "modified",
- "sort_order": "DESC",
- "track_changes": 1
+	"actions": [],
+	"allow_rename": 0,
+	"autoname": "hash",
+	"creation": "2026-04-19 00:00:00.000000",
+	"doctype": "DocType",
+	"engine": "InnoDB",
+	"field_order": [
+		"title",
+		"status",
+		"analysis_section",
+		"confidence",
+		"reason",
+		"column_break_omnexa_1",
+		"expected_impact",
+		"action_route",
+		"owner_section",
+		"recommendation_owner",
+		"owner_user"
+	],
+	"fields": [
+		{
+			"fieldname": "title",
+			"fieldtype": "Data",
+			"label": "Title",
+			"reqd": 1
+		},
+		{
+			"fieldname": "status",
+			"fieldtype": "Select",
+			"label": "Status",
+			"options": "New\nViewed\nAccepted\nRejected\nDeferred",
+			"default": "New"
+		},
+		{
+			"fieldname": "analysis_section",
+			"fieldtype": "Section Break",
+			"label": "Analysis"
+		},
+		{
+			"fieldname": "confidence",
+			"fieldtype": "Percent",
+			"label": "Confidence"
+		},
+		{
+			"fieldname": "reason",
+			"fieldtype": "Small Text",
+			"label": "Reason"
+		},
+		{
+			"fieldname": "expected_impact",
+			"fieldtype": "Small Text",
+			"label": "Expected Impact"
+		},
+		{
+			"fieldname": "action_route",
+			"fieldtype": "Data",
+			"label": "Action Route"
+		},
+		{
+			"fieldname": "owner_section",
+			"fieldtype": "Section Break",
+			"label": "Ownership"
+		},
+		{
+			"fieldname": "recommendation_owner",
+			"fieldtype": "Link",
+			"label": "Recommendation Owner",
+			"options": "User"
+		},
+		{
+			"fieldname": "owner_user",
+			"fieldtype": "Link",
+			"label": "Owner",
+			"options": "User"
+		},
+		{
+			"fieldname": "column_break_omnexa_1",
+			"fieldtype": "Column Break"
+		}
+	],
+	"index_web_pages_for_search": 0,
+	"links": [],
+	"modified": "2026-04-19 00:00:00.000000",
+	"modified_by": "Administrator",
+	"module": "Omnexa Intelligence Core",
+	"name": "Intelligence Recommendation",
+	"owner": "Administrator",
+	"permissions": [
+		{
+			"create": 1,
+			"delete": 1,
+			"email": 1,
+			"export": 1,
+			"print": 1,
+			"read": 1,
+			"report": 1,
+			"role": "System Manager",
+			"share": 1,
+			"write": 1
+		}
+	],
+	"sort_field": "modified",
+	"sort_order": "DESC",
+	"track_changes": 1
 }

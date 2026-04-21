@@ -1,113 +1,101 @@
 {
- "actions": [],
- "allow_rename": 0,
- "autoname": "hash",
- "creation": "2026-04-19 00:00:00.000000",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "identity_section",
-  "signal_type",
-  "title",
-  "severity",
-  "context_section",
-  "workspace",
-  "entity_doctype",
-  "entity_name",
-  "evidence_json",
-  "classification_code",
-  "control_section",
-  "owner_user"
- ],
- "fields": [
-  {
-   "fieldname": "identity_section",
-   "fieldtype": "Section Break",
-   "label": "Signal Identity"
-  },
-  {
-   "fieldname": "signal_type",
-   "fieldtype": "Data",
-   "label": "Signal Type",
-   "reqd": 1
-  },
-  {
-   "fieldname": "title",
-   "fieldtype": "Data",
-   "label": "Title",
-   "reqd": 1
-  },
-  {
-   "fieldname": "severity",
-   "fieldtype": "Select",
-   "label": "Severity",
-   "options": "low\nmedium\nhigh\ncritical",
-   "default": "medium"
-  },
-  {
-   "fieldname": "context_section",
-   "fieldtype": "Section Break",
-   "label": "Context and Evidence"
-  },
-  {
-   "fieldname": "workspace",
-   "fieldtype": "Data",
-   "label": "Workspace"
-  },
-  {
-   "fieldname": "entity_doctype",
-   "fieldtype": "Data",
-   "label": "Entity DocType"
-  },
-  {
-   "fieldname": "entity_name",
-   "fieldtype": "Data",
-   "label": "Entity Name"
-  },
-  {
-   "fieldname": "evidence_json",
-   "fieldtype": "Long Text",
-   "label": "Evidence JSON"
-  },
-  {
-   "fieldname": "classification_code",
-   "fieldtype": "Data",
-   "label": "Classification Code"
-  },
-  {
-   "fieldname": "control_section",
-   "fieldtype": "Section Break",
-   "label": "Control"
-  },
-  {
-   "fieldname": "owner_user",
-   "fieldtype": "Link",
-   "label": "Owner",
-   "options": "User"
-  }
- ],
- "index_web_pages_for_search": 0,
- "links": [],
- "modified": "2026-04-19 00:00:00.000000",
- "modified_by": "Administrator",
- "module": "Omnexa Intelligence Core",
- "name": "Intelligence Signal",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
- "sort_field": "modified",
- "sort_order": "DESC",
- "track_changes": 1
+	"actions": [],
+	"allow_rename": 0,
+	"autoname": "hash",
+	"creation": "2026-04-19 00:00:00.000000",
+	"doctype": "DocType",
+	"engine": "InnoDB",
+	"field_order": [
+		"signal_type",
+		"title",
+		"severity",
+		"context_section",
+		"workspace",
+		"entity_doctype",
+		"entity_name",
+		"evidence_json",
+		"classification_code",
+		"owner_user"
+	],
+	"fields": [
+		{
+			"fieldname": "signal_type",
+			"fieldtype": "Data",
+			"label": "Signal Type",
+			"reqd": 1
+		},
+		{
+			"fieldname": "title",
+			"fieldtype": "Data",
+			"label": "Title",
+			"reqd": 1
+		},
+		{
+			"fieldname": "severity",
+			"fieldtype": "Select",
+			"label": "Severity",
+			"options": "low\nmedium\nhigh\ncritical",
+			"default": "medium"
+		},
+		{
+			"fieldname": "context_section",
+			"fieldtype": "Section Break",
+			"label": "Context and Evidence"
+		},
+		{
+			"fieldname": "workspace",
+			"fieldtype": "Data",
+			"label": "Workspace"
+		},
+		{
+			"fieldname": "entity_doctype",
+			"fieldtype": "Data",
+			"label": "Entity DocType"
+		},
+		{
+			"fieldname": "entity_name",
+			"fieldtype": "Data",
+			"label": "Entity Name"
+		},
+		{
+			"fieldname": "evidence_json",
+			"fieldtype": "Long Text",
+			"label": "Evidence JSON"
+		},
+		{
+			"fieldname": "classification_code",
+			"fieldtype": "Data",
+			"label": "Classification Code"
+		},
+		{
+			"fieldname": "owner_user",
+			"fieldtype": "Link",
+			"label": "Owner",
+			"options": "User"
+		}
+	],
+	"index_web_pages_for_search": 0,
+	"links": [],
+	"modified": "2026-04-19 00:00:00.000000",
+	"modified_by": "Administrator",
+	"module": "Omnexa Intelligence Core",
+	"name": "Intelligence Signal",
+	"owner": "Administrator",
+	"permissions": [
+		{
+			"create": 1,
+			"delete": 1,
+			"email": 1,
+			"export": 1,
+			"print": 1,
+			"read": 1,
+			"report": 1,
+			"role": "System Manager",
+			"share": 1,
+			"write": 1
+		}
+	],
+	"sort_field": "modified",
+	"sort_order": "DESC",
+	"track_changes": 1
 }
