@@ -90,6 +90,8 @@ doctype_list_js = {
 # ------------
 
 # before_install = "omnexa_intelligence_core.install.before_install"
+before_install = "omnexa_intelligence_core.install.enforce_supported_frappe_version"
+before_migrate = "omnexa_intelligence_core.install.enforce_supported_frappe_version"
 after_install = "omnexa_intelligence_core.install.after_install"
 after_migrate = "omnexa_intelligence_core.install.after_migrate"
 
