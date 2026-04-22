@@ -1,6 +1,6 @@
 app_name = "omnexa_intelligence_core"
-app_title = "Omnexa Intelligence Core"
-app_publisher = "Omnexa"
+app_title = "ErpGenEx Intelligence Core"
+app_publisher = "ErpGenEx"
 app_description = "Signals, predictions, recommendations, risk and benchmark engine"
 app_email = "dev@omnexa.local"
 app_license = "mit"

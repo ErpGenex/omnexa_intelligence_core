@@ -1,7 +1,7 @@
 [project]
 name = "omnexa_intelligence_core"
 authors = [
-    { name = "Omnexa", email = "dev@omnexa.local"}
+    { name = "ErpGenEx", email = "dev@omnexa.local"}
 ]
 description = "Signals, predictions, recommendations, risk and benchmark engine"
 requires-python = ">=3.10"
