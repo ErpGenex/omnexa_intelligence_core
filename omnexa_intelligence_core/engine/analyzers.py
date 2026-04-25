@@ -22,10 +22,9 @@ def _upsert_signal(signal_type: str, title: str, severity: str, workspace: str, 
 		"evidence_json": evidence_json,
 	}
 	if name:
-		doc = frappe.get_doc("Intelligence Signal", name)
-		doc.update(values)
-		doc.save(ignore_permissions=True)
-		return doc.name
+		# Use db update to avoid optimistic-lock collisions during migrate hooks.
+		frappe.db.set_value("Intelligence Signal", name, values, update_modified=True)
+		return name
 	doc = frappe.get_doc({"doctype": "Intelligence Signal", **values})
 	doc.insert(ignore_permissions=True)
 	return doc.name
@@ -42,10 +41,9 @@ def _upsert_recommendation(title: str, reason: str, expected_impact: str, confid
 		"status": "New",
 	}
 	if name:
-		doc = frappe.get_doc("Intelligence Recommendation", name)
-		doc.update(values)
-		doc.save(ignore_permissions=True)
-		return doc.name
+		# Use db update to avoid optimistic-lock collisions during migrate hooks.
+		frappe.db.set_value("Intelligence Recommendation", name, values, update_modified=True)
+		return name
 	doc = frappe.get_doc({"doctype": "Intelligence Recommendation", **values})
 	doc.insert(ignore_permissions=True)
 	return doc.name
@@ -65,10 +63,9 @@ def _upsert_prediction(metric: str, horizon_days: int, predicted_value: float, c
 		"basis_note": basis_note,
 	}
 	if name:
-		doc = frappe.get_doc("Prediction Snapshot", name)
-		doc.update(values)
-		doc.save(ignore_permissions=True)
-		return doc.name
+		# Use db update to avoid optimistic-lock collisions during migrate hooks.
+		frappe.db.set_value("Prediction Snapshot", name, values, update_modified=True)
+		return name
 	doc = frappe.get_doc({"doctype": "Prediction Snapshot", **values})
 	doc.insert(ignore_permissions=True)
 	return doc.name
