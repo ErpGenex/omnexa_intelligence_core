@@ -8,6 +8,24 @@ from datetime import date, timedelta
 import frappe
 
 
+def _doctype_ready(doctype: str) -> bool:
+	if not frappe.db.exists("DocType", doctype):
+		return False
+	try:
+		return bool(frappe.db.table_exists(doctype))
+	except Exception:
+		return False
+
+
+def _safe_count(doctype: str) -> int:
+	if not _doctype_ready(doctype):
+		return 0
+	try:
+		return int(frappe.db.count(doctype))
+	except Exception:
+		return 0
+
+
 def _upsert_signal(signal_type: str, title: str, severity: str, workspace: str, evidence_json: str):
 	name = frappe.db.get_value(
 		"Intelligence Signal",
@@ -91,6 +109,8 @@ def _forecast_revenue_30d() -> tuple[float, float, str]:
 
 	Kept intentionally transparent and auditable; can be replaced later with ML models.
 	"""
+	if not _doctype_ready("Sales Invoice"):
+		return 0.0, 0.45, "baseline skipped: Sales Invoice not available", 0
 	from_dt = (date.today() - timedelta(days=90)).isoformat()
 	rows = frappe.db.sql(
 		"""
@@ -114,6 +134,8 @@ def _forecast_revenue_30d() -> tuple[float, float, str]:
 
 def _forecast_cashflow_30d() -> tuple[float, float, str, int]:
 	"""Baseline cashflow projection: invoiced sales minus invoiced purchases (30d window)."""
+	if not _doctype_ready("Sales Invoice") or not _doctype_ready("Purchase Invoice"):
+		return 0.0, 0.45, "baseline skipped: Sales/Purchase Invoice not available", 0
 	from_dt = (date.today() - timedelta(days=30)).isoformat()
 	rows = frappe.db.sql(
 		"""
@@ -140,6 +162,8 @@ def _forecast_cashflow_30d() -> tuple[float, float, str, int]:
 
 def _forecast_inventory_pressure_30d() -> tuple[float, float, str, int]:
 	"""Pressure index heuristic: demand docs vs supply docs in trailing 30 days."""
+	if not _doctype_ready("Sales Invoice") or not _doctype_ready("Purchase Invoice"):
+		return 0.0, 0.45, "baseline skipped: Sales/Purchase Invoice not available", 0
 	from_dt = (date.today() - timedelta(days=30)).isoformat()
 	rows = frappe.db.sql(
 		"""
@@ -211,11 +235,11 @@ def run_core_analyzers() -> dict:
 	recommendations = []
 	predictions = []
 
-	customer_count = int(frappe.db.count("Customer"))
-	item_count = int(frappe.db.count("Item"))
-	warehouse_count = int(frappe.db.count("Warehouse"))
-	si_count = int(frappe.db.count("Sales Invoice"))
-	pi_count = int(frappe.db.count("Purchase Invoice"))
+	customer_count = _safe_count("Customer")
+	item_count = _safe_count("Item")
+	warehouse_count = _safe_count("Warehouse")
+	si_count = _safe_count("Sales Invoice")
+	pi_count = _safe_count("Purchase Invoice")
 
 	# 1) Sales activation
 	if customer_count == 0:

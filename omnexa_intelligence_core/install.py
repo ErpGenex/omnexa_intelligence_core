@@ -29,9 +29,17 @@ def enforce_supported_frappe_version():
 
 
 def after_install():
-	run_core_analyzers()
+	_safe_run_core_analyzers()
 
 
 def after_migrate():
-	run_core_analyzers()
+	_safe_run_core_analyzers()
+
+
+def _safe_run_core_analyzers():
+	"""Keep fresh-install flow resilient when dependent doctypes are not ready yet."""
+	try:
+		run_core_analyzers()
+	except Exception:
+		frappe.log_error(frappe.get_traceback(), "Intelligence Core: run_core_analyzers during install/migrate")
 
