@@ -8,6 +8,16 @@ import frappe
 from omnexa_intelligence_core.engine.analyzers import run_core_analyzers
 from omnexa_setup_intelligence.api import get_executive_governance_summary
 
+_ACTION_QUEUE_DOCTYPE = "Intelligence Action Queue"
+
+
+def _action_queue_table_ready() -> bool:
+	"""False during fresh install / setup wizard before tabIntelligence Action Queue exists."""
+	try:
+		return bool(frappe.db and frappe.db.table_exists(_ACTION_QUEUE_DOCTYPE))
+	except Exception:
+		return False
+
 
 def _severity_weight(severity: str) -> int:
 	sev = (severity or "").lower()
@@ -94,9 +104,14 @@ def _build_playbooks(predictions: list[dict]) -> list[dict]:
 
 
 def _enqueue_action(playbook: dict, step: str, source: str = "dashboard") -> str:
+	if not _action_queue_table_ready():
+		frappe.throw(
+			"Intelligence Action Queue is not installed yet. Complete setup / migrate and retry.",
+			frappe.ValidationError,
+		)
 	title = f"{playbook.get('id')}: {step}"
 	name = frappe.db.get_value(
-		"Intelligence Action Queue",
+		_ACTION_QUEUE_DOCTYPE,
 		{"title": title, "status": ["in", ["Pending Approval", "Approved", "Queued"]]},
 		"name",
 	)
@@ -104,7 +119,7 @@ def _enqueue_action(playbook: dict, step: str, source: str = "dashboard") -> str
 		return name
 	doc = frappe.get_doc(
 		{
-			"doctype": "Intelligence Action Queue",
+			"doctype": _ACTION_QUEUE_DOCTYPE,
 			"title": title,
 			"playbook_id": playbook.get("id"),
 			"priority": playbook.get("priority") or "medium",
@@ -126,13 +141,23 @@ def _append_audit_log(doc, message: str):
 
 
 def _queue_kpis() -> dict:
+	if not _action_queue_table_ready():
+		return {
+			"pending_approval": 0,
+			"approved": 0,
+			"running": 0,
+			"simulated": 0,
+			"executed": 0,
+			"failed": 0,
+		}
+	dt = _ACTION_QUEUE_DOCTYPE
 	return {
-		"pending_approval": int(frappe.db.count("Intelligence Action Queue", {"status": "Pending Approval"})),
-		"approved": int(frappe.db.count("Intelligence Action Queue", {"status": "Approved"})),
-		"running": int(frappe.db.count("Intelligence Action Queue", {"status": "Running"})),
-		"simulated": int(frappe.db.count("Intelligence Action Queue", {"status": "Simulated"})),
-		"executed": int(frappe.db.count("Intelligence Action Queue", {"status": "Executed"})),
-		"failed": int(frappe.db.count("Intelligence Action Queue", {"status": "Failed"})),
+		"pending_approval": int(frappe.db.count(dt, {"status": "Pending Approval"})),
+		"approved": int(frappe.db.count(dt, {"status": "Approved"})),
+		"running": int(frappe.db.count(dt, {"status": "Running"})),
+		"simulated": int(frappe.db.count(dt, {"status": "Simulated"})),
+		"executed": int(frappe.db.count(dt, {"status": "Executed"})),
+		"failed": int(frappe.db.count(dt, {"status": "Failed"})),
 	}
 
 
@@ -197,6 +222,8 @@ def enqueue_playbook_actions(auto_approve: int | str = 0):
 	"""Create actionable queue items from current dashboard playbooks."""
 	if "System Manager" not in (frappe.get_roles() or []):
 		frappe.throw("Not permitted", frappe.PermissionError)
+	if not _action_queue_table_ready():
+		return {"ok": True, "created_count": 0, "action_ids": []}
 
 	dashboard = get_executive_intelligence_dashboard()
 	playbooks = dashboard.get("playbooks") or []
@@ -214,7 +241,7 @@ def enqueue_playbook_actions(auto_approve: int | str = 0):
 def approve_action(action_id: str):
 	if "System Manager" not in (frappe.get_roles() or []):
 		frappe.throw("Not permitted", frappe.PermissionError)
-	doc = frappe.get_doc("Intelligence Action Queue", action_id)
+	doc = frappe.get_doc(_ACTION_QUEUE_DOCTYPE, action_id)
 	if doc.status in {"Executed", "Simulated", "Cancelled"}:
 		return {"ok": True, "name": doc.name, "status": doc.status}
 	doc.status = "Approved"
@@ -229,7 +256,7 @@ def approve_action(action_id: str):
 def reject_action(action_id: str, reason: str | None = None):
 	if "System Manager" not in (frappe.get_roles() or []):
 		frappe.throw("Not permitted", frappe.PermissionError)
-	doc = frappe.get_doc("Intelligence Action Queue", action_id)
+	doc = frappe.get_doc(_ACTION_QUEUE_DOCTYPE, action_id)
 	doc.status = "Rejected"
 	_append_audit_log(doc, f"rejected by {frappe.session.user}; reason={reason or 'n/a'}")
 	doc.save(ignore_permissions=True)
@@ -244,8 +271,10 @@ def execute_pending_actions(dry_run: int | str = 1, limit: int | str = 10):
 
 	is_dry = int(dry_run or 1) == 1
 	lim = max(1, min(100, int(limit or 10)))
+	if not _action_queue_table_ready():
+		return {"ok": True, "processed_count": 0, "action_ids": [], "dry_run": is_dry}
 	rows = frappe.get_all(
-		"Intelligence Action Queue",
+		_ACTION_QUEUE_DOCTYPE,
 		filters={"status": "Approved"},
 		fields=["name", "title", "payload_json", "priority"],
 		order_by="creation asc",
@@ -253,7 +282,7 @@ def execute_pending_actions(dry_run: int | str = 1, limit: int | str = 10):
 	)
 	done = []
 	for row in rows:
-		doc = frappe.get_doc("Intelligence Action Queue", row.get("name"))
+		doc = frappe.get_doc(_ACTION_QUEUE_DOCTYPE, row.get("name"))
 		try:
 			doc.status = "Running"
 			_append_audit_log(doc, f"execution started by {frappe.session.user}")
@@ -281,7 +310,7 @@ def execute_action(action_id: str, dry_run: int | str = 1):
 	"""Execute one approved action by id."""
 	if "System Manager" not in (frappe.get_roles() or []):
 		frappe.throw("Not permitted", frappe.PermissionError)
-	doc = frappe.get_doc("Intelligence Action Queue", action_id)
+	doc = frappe.get_doc(_ACTION_QUEUE_DOCTYPE, action_id)
 	if doc.status != "Approved":
 		return {"ok": False, "message": "Action must be Approved before execution.", "status": doc.status}
 	is_dry = int(dry_run or 1) == 1
@@ -311,7 +340,7 @@ def rollback_action(action_id: str, note: str | None = None):
 	"""Safe rollback hook for executed/simulated actions."""
 	if "System Manager" not in (frappe.get_roles() or []):
 		frappe.throw("Not permitted", frappe.PermissionError)
-	doc = frappe.get_doc("Intelligence Action Queue", action_id)
+	doc = frappe.get_doc(_ACTION_QUEUE_DOCTYPE, action_id)
 	if doc.status not in {"Executed", "Simulated"}:
 		return {"ok": False, "message": "Only executed/simulated actions can be rolled back."}
 	try:
@@ -335,7 +364,9 @@ def rollback_action(action_id: str, note: str | None = None):
 def get_pending_approval_count():
 	if frappe.session.user == "Guest":
 		frappe.throw("Login required.", frappe.PermissionError)
-	count = frappe.db.count("Intelligence Action Queue", filters={"status": "Pending Approval"})
+	if not _action_queue_table_ready():
+		return {"ok": True, "pending_approval_count": 0}
+	count = frappe.db.count(_ACTION_QUEUE_DOCTYPE, filters={"status": "Pending Approval"})
 	return {"ok": True, "pending_approval_count": int(count)}
 
 
@@ -369,13 +400,16 @@ def get_ops_dashboard_payload():
 	if frappe.session.user == "Guest":
 		frappe.throw("Login required.", frappe.PermissionError)
 	dashboard = get_executive_intelligence_dashboard()
-	pending_actions = frappe.get_all(
-		"Intelligence Action Queue",
-		filters={"status": "Pending Approval"},
-		fields=["name", "title", "priority", "source", "creation"],
-		order_by="creation asc",
-		limit=20,
-	)
+	if not _action_queue_table_ready():
+		pending_actions = []
+	else:
+		pending_actions = frappe.get_all(
+			_ACTION_QUEUE_DOCTYPE,
+			filters={"status": "Pending Approval"},
+			fields=["name", "title", "priority", "source", "creation"],
+			order_by="creation asc",
+			limit=20,
+		)
 	return {
 		"ok": True,
 		"queue_kpis": _queue_kpis(),
