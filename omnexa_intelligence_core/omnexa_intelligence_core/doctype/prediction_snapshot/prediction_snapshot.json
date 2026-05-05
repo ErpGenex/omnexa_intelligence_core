@@ -6,8 +6,10 @@
 	"doctype": "DocType",
 	"engine": "InnoDB",
 	"field_order": [
+		"tab_break_overview",
 		"metric",
 		"horizon_days",
+		"tab_break_1",
 		"forecast_section",
 		"predicted_value",
 		"confidence",
@@ -17,6 +19,16 @@
 		"snapshot_reference"
 	],
 	"fields": [
+		{
+			"fieldname": "tab_break_overview",
+			"fieldtype": "Tab Break",
+			"label": "Overview"
+		},
+		{
+			"fieldname": "tab_break_1",
+			"fieldtype": "Tab Break",
+			"label": "Details"
+		},
 		{
 			"fieldname": "metric",
 			"fieldtype": "Data",
@@ -70,7 +82,7 @@
 	],
 	"index_web_pages_for_search": 0,
 	"links": [],
-	"modified": "2026-04-19 00:00:00.000000",
+	"modified": "2026-05-07 12:00:00",
 	"modified_by": "Administrator",
 	"module": "Omnexa Intelligence Core",
 	"name": "Prediction Snapshot",

@@ -6,20 +6,24 @@
 	"doctype": "DocType",
 	"engine": "InnoDB",
 	"field_order": [
+		"tab_break_overview",
 		"title",
 		"playbook_id",
+		"tab_break_1",
 		"priority_section",
 		"priority",
 		"status",
 		"column_break_omnexa_1",
 		"approved_by",
 		"approved_on",
+		"tab_break_2",
 		"payload_section",
 		"source",
 		"payload_json",
 		"execution_log",
 		"last_error",
 		"executed_on",
+		"tab_break_3",
 		"rollback_section",
 		"rollback_status",
 		"rollback_ref",
@@ -28,6 +32,26 @@
 		"owner_user"
 	],
 	"fields": [
+		{
+			"fieldname": "tab_break_overview",
+			"fieldtype": "Tab Break",
+			"label": "Overview"
+		},
+		{
+			"fieldname": "tab_break_1",
+			"fieldtype": "Tab Break",
+			"label": "Details"
+		},
+		{
+			"fieldname": "tab_break_2",
+			"fieldtype": "Tab Break",
+			"label": "Further"
+		},
+		{
+			"fieldname": "tab_break_3",
+			"fieldtype": "Tab Break",
+			"label": "Posting"
+		},
 		{
 			"fieldname": "title",
 			"fieldtype": "Data",
@@ -138,7 +162,7 @@
 	],
 	"index_web_pages_for_search": 0,
 	"links": [],
-	"modified": "2026-04-19 00:00:00.000000",
+	"modified": "2026-05-07 12:00:00",
 	"modified_by": "Administrator",
 	"module": "Omnexa Intelligence Core",
 	"name": "Intelligence Action Queue",
