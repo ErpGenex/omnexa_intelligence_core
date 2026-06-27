@@ -171,6 +171,100 @@ def run_intelligence_scan():
 	return {"ok": True, **result}
 
 
+@frappe.whitelist(methods=["GET", "POST"])
+def get_finance_bi_dataset(company: str, from_date: str, to_date: str) -> dict:
+	"""Phase 5: unified BI payload for executive finance cockpit."""
+	if frappe.session.user == "Guest":
+		frappe.throw("Login required.", frappe.PermissionError)
+	if not company or not from_date or not to_date:
+		frappe.throw("company, from_date, to_date are required", frappe.ValidationError)
+
+	je = frappe.db.sql(
+		"""
+		SELECT
+			SUM(jea.debit) AS total_debit,
+			SUM(jea.credit) AS total_credit
+		FROM `tabJournal Entry` je
+		INNER JOIN `tabJournal Entry Account` jea ON jea.parent = je.name
+		WHERE je.company = %(company)s
+		  AND je.docstatus = 1
+		  AND je.posting_date BETWEEN %(from_date)s AND %(to_date)s
+		""",
+		{"company": company, "from_date": from_date, "to_date": to_date},
+		as_dict=True,
+	)[0]
+
+	sales = frappe.db.sql(
+		"""
+		SELECT
+			COUNT(*) AS invoices,
+			SUM(grand_total) AS sales_total
+		FROM `tabSales Invoice`
+		WHERE company = %(company)s
+		  AND docstatus = 1
+		  AND posting_date BETWEEN %(from_date)s AND %(to_date)s
+		""",
+		{"company": company, "from_date": from_date, "to_date": to_date},
+		as_dict=True,
+	)[0]
+
+	purchase = frappe.db.sql(
+		"""
+		SELECT
+			COUNT(*) AS invoices,
+			SUM(grand_total) AS purchase_total
+		FROM `tabPurchase Invoice`
+		WHERE company = %(company)s
+		  AND docstatus = 1
+		  AND posting_date BETWEEN %(from_date)s AND %(to_date)s
+		""",
+		{"company": company, "from_date": from_date, "to_date": to_date},
+		as_dict=True,
+	)[0]
+
+	return {
+		"ok": True,
+		"company": company,
+		"period": {"from_date": from_date, "to_date": to_date},
+		"kpis": {
+			"total_debit": float(je.get("total_debit") or 0),
+			"total_credit": float(je.get("total_credit") or 0),
+			"sales_total": float(sales.get("sales_total") or 0),
+			"purchase_total": float(purchase.get("purchase_total") or 0),
+			"sales_invoices": int(sales.get("invoices") or 0),
+			"purchase_invoices": int(purchase.get("invoices") or 0),
+		},
+	}
+
+
+@frappe.whitelist(methods=["GET", "POST"])
+def get_ai_finance_context(company: str, from_date: str, to_date: str) -> dict:
+	"""Phase 6: semantic finance context for AI assistant consumption."""
+	data = get_finance_bi_dataset(company=company, from_date=from_date, to_date=to_date)
+	kpis = data.get("kpis") or {}
+	glossary = [
+		{"key": "total_debit", "label_ar": "إجمالي المدين", "label_en": "Total Debit"},
+		{"key": "total_credit", "label_ar": "إجمالي الدائن", "label_en": "Total Credit"},
+		{"key": "sales_total", "label_ar": "إجمالي المبيعات", "label_en": "Sales Total"},
+		{"key": "purchase_total", "label_ar": "إجمالي المشتريات", "label_en": "Purchase Total"},
+	]
+	return {
+		"ok": True,
+		"company": company,
+		"period": {"from_date": from_date, "to_date": to_date},
+		"semantic_context": {
+			"domain": "finance",
+			"language_priority": ["ar", "en"],
+			"glossary": glossary,
+			"kpis": kpis,
+		},
+		"safety": {
+			"mode": "read_only",
+			"human_approval_required_for_actions": True,
+		},
+	}
+
+
 @frappe.whitelist(methods=["POST"])
 def get_executive_intelligence_dashboard():
 	"""Unified executive payload for governance + intelligence outputs."""

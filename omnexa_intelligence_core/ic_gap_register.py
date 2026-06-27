@@ -76,10 +76,7 @@ def _detect_gap(gap: dict) -> bool:
 		if detect.startswith("api:"):
 			return bool(frappe.get_attr(detect.split(":", 1)[1]))
 		if detect.startswith("module:"):
-			target = detect.split(":", 1)[1]
-			if "." in target and not target.startswith(APP):
-				return bool(frappe.get_module(target))
-			return bool(frappe.get_module(f"{APP}.{target}"))
+			return bool(frappe.get_module(f"{APP}.{detect.split(':', 1)[1]}"))
 		if detect.startswith("file:"):
 			rel = detect.split(":", 1)[1]
 			root = os.path.join(get_bench_path(), "apps", APP, APP)

@@ -13,6 +13,25 @@ frappe.pages["intelligence-ops-dashboard"].on_page_load = function (wrapper) {
 			</div>
 			<div class="mb-3 row" data-section="kpis"></div>
 			<div class="mb-3" data-section="health"></div>
+			<div class="card mb-3">
+				<div class="card-header"><b>${__("Finance Assistant (Read-only)")}</b></div>
+				<div class="card-body">
+					<div class="row g-2 align-items-end">
+						<div class="col-md-3">
+							<label class="small text-muted">${__("Company")}</label>
+							<input type="text" class="form-control form-control-sm" data-field="fa-company" />
+						</div>
+						<div class="col-md-7">
+							<label class="small text-muted">${__("Question")}</label>
+							<input type="text" class="form-control form-control-sm" data-field="fa-question" placeholder="${__("Sales, AR, cash, VAT…")}" />
+						</div>
+						<div class="col-md-2">
+							<button class="btn btn-sm btn-primary w-100" data-action="ask-finance">${__("Ask")}</button>
+						</div>
+					</div>
+					<div class="mt-2 small text-muted" data-section="fa-answer"></div>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-md-6">
 					<div class="card mb-3">
@@ -152,6 +171,21 @@ frappe.pages["intelligence-ops-dashboard"].on_page_load = function (wrapper) {
 		});
 		d.show();
 	};
+
+	$root.on("click", '[data-action="ask-finance"]', async () => {
+		const company = ($root.find('[data-field="fa-company"]').val() || "").trim();
+		const question = ($root.find('[data-field="fa-question"]').val() || "").trim();
+		if (!company || !question) {
+			frappe.msgprint(__("Company and question are required."));
+			return;
+		}
+		const r = await frappe.call({
+			method: "omnexa_intelligence_core.finance_ai.ask_finance_assistant",
+			args: { company, question },
+		});
+		const answer = (r && r.message && r.message.answer) || __("No answer.");
+		$root.find('[data-section="fa-answer"]').text(answer);
+	});
 
 	$root.on("click", '[data-action="refresh"]', () => refreshData());
 	$root.on("click", '[data-action="run-cycle"]', () => runCycle());
