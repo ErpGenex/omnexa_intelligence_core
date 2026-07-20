@@ -1,0 +1,13 @@
+{
+ "doctype": "Page",
+ "name": "intelligence-ops-dashboard",
+ "module": "Omnexa Intelligence Core",
+ "title": "Intelligence Ops Dashboard",
+ "icon": "dashboard",
+ "restrict_to_domain": null,
+ "roles": [
+  {
+   "role": "System Manager"
+  }
+ ]
+}
