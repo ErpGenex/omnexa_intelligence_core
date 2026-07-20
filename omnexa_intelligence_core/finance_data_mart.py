@@ -20,7 +20,8 @@ def _ar_ap_summary(company: str, from_date: str, to_date: str) -> dict:
 		WHERE company = %(company)s AND docstatus = 1 AND outstanding_amount > 0
 		  AND posting_date <= %(to_date)s
 		""",
-		{"company": company, "to_date": to_date},
+		{"company": company, "to_date": to_date
+	},
 		as_dict=True,
 	)[0]
 	ap = frappe.db.sql(
@@ -30,21 +31,23 @@ def _ar_ap_summary(company: str, from_date: str, to_date: str) -> dict:
 		WHERE company = %(company)s AND docstatus = 1 AND outstanding_amount > 0
 		  AND posting_date <= %(to_date)s
 		""",
-		{"company": company, "to_date": to_date},
+		{"company": company, "to_date": to_date
+	},
 		as_dict=True,
 	)[0]
 	return {
 		"ar_outstanding": flt(ar.get("outstanding")),
 		"ar_open_invoices": int(ar.get("open_count") or 0),
 		"ap_outstanding": flt(ap.get("outstanding")),
-		"ap_open_invoices": int(ap.get("open_count") or 0),
+		"ap_open_invoices": int(ap.get("open_count") or 0)
 	}
 
 
 def _cash_position(company: str, to_date: str) -> dict:
 	bank_accounts = frappe.get_all(
 		"Bank Account",
-		filters={"company": company},
+		filters={"company": company
+	},
 		fields=["name", "gl_account"],
 	)
 	total = 0.0
@@ -58,10 +61,12 @@ def _cash_position(company: str, to_date: str) -> dict:
 			WHERE company = %(company)s AND account = %(account)s
 			  AND posting_date <= %(to_date)s AND is_cancelled = 0
 			""",
-			{"company": company, "account": ba.gl_account, "to_date": to_date},
+			{"company": company, "account": ba.gl_account, "to_date": to_date
+	},
 		)[0][0]
 		total += flt(bal)
-	return {"cash_and_bank_balance": total, "bank_accounts": len(bank_accounts)}
+	return {"cash_and_bank_balance": total, "bank_accounts": len(bank_accounts)
+	}
 
 
 def _vat_snapshot(company: str) -> dict:
@@ -70,7 +75,7 @@ def _vat_snapshot(company: str) -> dict:
 		"input_vat_gl": vat.get("input_vat_gl"),
 		"output_vat_gl": vat.get("output_vat_gl"),
 		"input_source": vat.get("input_source"),
-		"output_source": vat.get("output_source"),
+		"output_source": vat.get("output_source")
 	}
 
 
@@ -85,13 +90,14 @@ def get_finance_data_mart(company: str, from_date: str, to_date: str) -> dict:
 		"ok": True,
 		"schema_version": "2026-06-25",
 		"company": company,
-		"period": {"from_date": from_date, "to_date": to_date},
-		"gl": base.get("kpis") or {},
+		"period": {"from_date": from_date, "to_date": to_date
+	},
+		"gl": base.get("kpis") or {
+	},
 		"ar_ap": _ar_ap_summary(company, from_date, to_date),
 		"cash": _cash_position(company, to_date),
 		"vat": _vat_snapshot(company),
 		"read_replica_hint": {
 			"recommended": bool(frappe.conf.get("read_from_replica")),
-			"site_config_key": "read_from_replica",
-		},
+			"site_config_key": "read_from_replica"}
 	}

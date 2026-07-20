@@ -71,8 +71,7 @@ def _build_playbooks(predictions: list[dict]) -> list[dict]:
 					"Freeze discretionary spending approvals for 14 days.",
 					"Run top-20 overdue receivables collection sprint.",
 					"Rephase non-critical supplier payments.",
-				],
-			}
+				]}
 		)
 	if ip >= 35:
 		playbooks.append(
@@ -84,8 +83,7 @@ def _build_playbooks(predictions: list[dict]) -> list[dict]:
 					"Raise replenishment requests for fast-moving SKUs.",
 					"Increase safety stock for constrained items.",
 					"Enable weekly supplier ETA review cadence.",
-				],
-			}
+				]}
 		)
 	if not playbooks:
 		playbooks.append(
@@ -97,8 +95,7 @@ def _build_playbooks(predictions: list[dict]) -> list[dict]:
 					"Review forecast drift and confidence weekly.",
 					"Optimize working-capital cycle by 3-5%.",
 					"Track top 5 process bottlenecks.",
-				],
-			}
+				]}
 		)
 	return playbooks
 
@@ -126,8 +123,8 @@ def _enqueue_action(playbook: dict, step: str, source: str = "dashboard") -> str
 			"status": "Pending Approval",
 			"source": source,
 			"rollback_status": "Not Requested",
-			"payload_json": frappe.as_json({"step": step, "playbook": playbook.get("title")}),
-		}
+			"payload_json": frappe.as_json({"step": step, "playbook": playbook.get("title")})
+	}
 	)
 	doc.insert(ignore_permissions=True)
 	return doc.name
@@ -148,16 +145,21 @@ def _queue_kpis() -> dict:
 			"running": 0,
 			"simulated": 0,
 			"executed": 0,
-			"failed": 0,
-		}
+			"failed": 0
+	}
 	dt = _ACTION_QUEUE_DOCTYPE
 	return {
-		"pending_approval": int(frappe.db.count(dt, {"status": "Pending Approval"})),
-		"approved": int(frappe.db.count(dt, {"status": "Approved"})),
-		"running": int(frappe.db.count(dt, {"status": "Running"})),
-		"simulated": int(frappe.db.count(dt, {"status": "Simulated"})),
-		"executed": int(frappe.db.count(dt, {"status": "Executed"})),
-		"failed": int(frappe.db.count(dt, {"status": "Failed"})),
+		"pending_approval": int(frappe.db.count(dt, {"status": "Pending Approval"
+	})),
+		"approved": int(frappe.db.count(dt, {"status": "Approved"
+	})),
+		"running": int(frappe.db.count(dt, {"status": "Running"
+	})),
+		"simulated": int(frappe.db.count(dt, {"status": "Simulated"
+	})),
+		"executed": int(frappe.db.count(dt, {"status": "Executed"
+	})),
+		"failed": int(frappe.db.count(dt, {"status": "Failed"}))
 	}
 
 
@@ -190,7 +192,8 @@ def get_finance_bi_dataset(company: str, from_date: str, to_date: str) -> dict:
 		  AND je.docstatus = 1
 		  AND je.posting_date BETWEEN %(from_date)s AND %(to_date)s
 		""",
-		{"company": company, "from_date": from_date, "to_date": to_date},
+		{"company": company, "from_date": from_date, "to_date": to_date
+	},
 		as_dict=True,
 	)[0]
 
@@ -204,7 +207,8 @@ def get_finance_bi_dataset(company: str, from_date: str, to_date: str) -> dict:
 		  AND docstatus = 1
 		  AND posting_date BETWEEN %(from_date)s AND %(to_date)s
 		""",
-		{"company": company, "from_date": from_date, "to_date": to_date},
+		{"company": company, "from_date": from_date, "to_date": to_date
+	},
 		as_dict=True,
 	)[0]
 
@@ -218,22 +222,23 @@ def get_finance_bi_dataset(company: str, from_date: str, to_date: str) -> dict:
 		  AND docstatus = 1
 		  AND posting_date BETWEEN %(from_date)s AND %(to_date)s
 		""",
-		{"company": company, "from_date": from_date, "to_date": to_date},
+		{"company": company, "from_date": from_date, "to_date": to_date
+	},
 		as_dict=True,
 	)[0]
 
 	return {
 		"ok": True,
 		"company": company,
-		"period": {"from_date": from_date, "to_date": to_date},
+		"period": {"from_date": from_date, "to_date": to_date
+	},
 		"kpis": {
 			"total_debit": float(je.get("total_debit") or 0),
 			"total_credit": float(je.get("total_credit") or 0),
 			"sales_total": float(sales.get("sales_total") or 0),
 			"purchase_total": float(purchase.get("purchase_total") or 0),
 			"sales_invoices": int(sales.get("invoices") or 0),
-			"purchase_invoices": int(purchase.get("invoices") or 0),
-		},
+			"purchase_invoices": int(purchase.get("invoices") or 0)}
 	}
 
 
@@ -243,25 +248,29 @@ def get_ai_finance_context(company: str, from_date: str, to_date: str) -> dict:
 	data = get_finance_bi_dataset(company=company, from_date=from_date, to_date=to_date)
 	kpis = data.get("kpis") or {}
 	glossary = [
-		{"key": "total_debit", "label_ar": "إجمالي المدين", "label_en": "Total Debit"},
-		{"key": "total_credit", "label_ar": "إجمالي الدائن", "label_en": "Total Credit"},
-		{"key": "sales_total", "label_ar": "إجمالي المبيعات", "label_en": "Sales Total"},
-		{"key": "purchase_total", "label_ar": "إجمالي المشتريات", "label_en": "Purchase Total"},
+		{"key": "total_debit", "label_ar": "إجمالي المدين", "label_en": "Total Debit"
+	},
+		{"key": "total_credit", "label_ar": "إجمالي الدائن", "label_en": "Total Credit"
+	},
+		{"key": "sales_total", "label_ar": "إجمالي المبيعات", "label_en": "Sales Total"
+	},
+		{"key": "purchase_total", "label_ar": "إجمالي المشتريات", "label_en": "Purchase Total"
+	},
 	]
 	return {
 		"ok": True,
 		"company": company,
-		"period": {"from_date": from_date, "to_date": to_date},
+		"period": {"from_date": from_date, "to_date": to_date
+	},
 		"semantic_context": {
 			"domain": "finance",
 			"language_priority": ["ar", "en"],
 			"glossary": glossary,
-			"kpis": kpis,
-		},
+			"kpis": kpis
+	},
 		"safety": {
 			"mode": "read_only",
-			"human_approval_required_for_actions": True,
-		},
+			"human_approval_required_for_actions": True}
 	}
 
 
@@ -307,7 +316,7 @@ def get_executive_intelligence_dashboard():
 		"signals": signals,
 		"recommendations": recommendations,
 		"predictions": predictions,
-		"playbooks": _build_playbooks(predictions),
+		"playbooks": _build_playbooks(predictions)
 	}
 
 
@@ -317,7 +326,8 @@ def enqueue_playbook_actions(auto_approve: int | str = 0):
 	if "System Manager" not in (frappe.get_roles() or []):
 		frappe.throw("Not permitted", frappe.PermissionError)
 	if not _action_queue_table_ready():
-		return {"ok": True, "created_count": 0, "action_ids": []}
+		return {"ok": True, "created_count": 0, "action_ids": []
+	}
 
 	dashboard = get_executive_intelligence_dashboard()
 	playbooks = dashboard.get("playbooks") or []
@@ -328,7 +338,8 @@ def enqueue_playbook_actions(auto_approve: int | str = 0):
 	if int(auto_approve or 0) == 1 and created:
 		for action_id in created:
 			approve_action(action_id)
-	return {"ok": True, "created_count": len(created), "action_ids": created}
+	return {"ok": True, "created_count": len(created), "action_ids": created
+	}
 
 
 @frappe.whitelist(methods=["POST"])
@@ -337,13 +348,15 @@ def approve_action(action_id: str):
 		frappe.throw("Not permitted", frappe.PermissionError)
 	doc = frappe.get_doc(_ACTION_QUEUE_DOCTYPE, action_id)
 	if doc.status in {"Executed", "Simulated", "Cancelled"}:
-		return {"ok": True, "name": doc.name, "status": doc.status}
+		return {"ok": True, "name": doc.name, "status": doc.status
+	}
 	doc.status = "Approved"
 	doc.approved_by = frappe.session.user
 	doc.approved_on = frappe.utils.now_datetime()
 	_append_audit_log(doc, f"approved by {frappe.session.user}")
 	doc.save(ignore_permissions=True)
-	return {"ok": True, "name": doc.name, "status": doc.status}
+	return {"ok": True, "name": doc.name, "status": doc.status
+	}
 
 
 @frappe.whitelist(methods=["POST"])
@@ -354,7 +367,8 @@ def reject_action(action_id: str, reason: str | None = None):
 	doc.status = "Rejected"
 	_append_audit_log(doc, f"rejected by {frappe.session.user}; reason={reason or 'n/a'}")
 	doc.save(ignore_permissions=True)
-	return {"ok": True, "name": doc.name, "status": doc.status}
+	return {"ok": True, "name": doc.name, "status": doc.status
+	}
 
 
 @frappe.whitelist(methods=["POST"])
@@ -366,10 +380,12 @@ def execute_pending_actions(dry_run: int | str = 1, limit: int | str = 10):
 	is_dry = int(dry_run or 1) == 1
 	lim = max(1, min(100, int(limit or 10)))
 	if not _action_queue_table_ready():
-		return {"ok": True, "processed_count": 0, "action_ids": [], "dry_run": is_dry}
+		return {"ok": True, "processed_count": 0, "action_ids": [], "dry_run": is_dry
+	}
 	rows = frappe.get_all(
 		_ACTION_QUEUE_DOCTYPE,
-		filters={"status": "Approved"},
+		filters={"status": "Approved"
+	},
 		fields=["name", "title", "payload_json", "priority"],
 		order_by="creation asc",
 		limit=lim,
@@ -396,7 +412,8 @@ def execute_pending_actions(dry_run: int | str = 1, limit: int | str = 10):
 			doc.last_error = str(ex)
 			_append_audit_log(doc, f"execution failed: {str(ex)}")
 			doc.save(ignore_permissions=True)
-	return {"ok": True, "processed_count": len(done), "action_ids": done, "dry_run": is_dry}
+	return {"ok": True, "processed_count": len(done), "action_ids": done, "dry_run": is_dry
+	}
 
 
 @frappe.whitelist(methods=["POST"])
@@ -406,7 +423,8 @@ def execute_action(action_id: str, dry_run: int | str = 1):
 		frappe.throw("Not permitted", frappe.PermissionError)
 	doc = frappe.get_doc(_ACTION_QUEUE_DOCTYPE, action_id)
 	if doc.status != "Approved":
-		return {"ok": False, "message": "Action must be Approved before execution.", "status": doc.status}
+		return {"ok": False, "message": "Action must be Approved before execution.", "status": doc.status
+	}
 	is_dry = int(dry_run or 1) == 1
 	try:
 		doc.status = "Running"
@@ -420,13 +438,15 @@ def execute_action(action_id: str, dry_run: int | str = 1):
 			_append_audit_log(doc, "execution completed (safe mode)")
 		doc.executed_on = frappe.utils.now_datetime()
 		doc.save(ignore_permissions=True)
-		return {"ok": True, "name": doc.name, "status": doc.status, "dry_run": is_dry}
+		return {"ok": True, "name": doc.name, "status": doc.status, "dry_run": is_dry
+	}
 	except Exception as ex:
 		doc.status = "Failed"
 		doc.last_error = str(ex)
 		_append_audit_log(doc, f"execution failed: {str(ex)}")
 		doc.save(ignore_permissions=True)
-		return {"ok": False, "name": doc.name, "status": doc.status}
+		return {"ok": False, "name": doc.name, "status": doc.status
+	}
 
 
 @frappe.whitelist(methods=["POST"])
@@ -436,7 +456,8 @@ def rollback_action(action_id: str, note: str | None = None):
 		frappe.throw("Not permitted", frappe.PermissionError)
 	doc = frappe.get_doc(_ACTION_QUEUE_DOCTYPE, action_id)
 	if doc.status not in {"Executed", "Simulated"}:
-		return {"ok": False, "message": "Only executed/simulated actions can be rolled back."}
+		return {"ok": False, "message": "Only executed/simulated actions can be rolled back."
+	}
 	try:
 		doc.rollback_status = "Requested"
 		_append_audit_log(doc, f"rollback requested by {frappe.session.user}")
@@ -445,13 +466,15 @@ def rollback_action(action_id: str, note: str | None = None):
 		doc.rollback_ref = f"RB-{frappe.generate_hash(length=8)}"
 		_append_audit_log(doc, f"rollback completed; ref={doc.rollback_ref}; note={note or 'n/a'}")
 		doc.save(ignore_permissions=True)
-		return {"ok": True, "name": doc.name, "rollback_status": doc.rollback_status, "rollback_ref": doc.rollback_ref}
+		return {"ok": True, "name": doc.name, "rollback_status": doc.rollback_status, "rollback_ref": doc.rollback_ref
+	}
 	except Exception as ex:
 		doc.rollback_status = "Rollback Failed"
 		doc.last_error = str(ex)
 		_append_audit_log(doc, f"rollback failed: {str(ex)}")
 		doc.save(ignore_permissions=True)
-		return {"ok": False, "name": doc.name, "rollback_status": doc.rollback_status}
+		return {"ok": False, "name": doc.name, "rollback_status": doc.rollback_status
+	}
 
 
 @frappe.whitelist(methods=["GET", "POST"])
@@ -459,9 +482,12 @@ def get_pending_approval_count():
 	if frappe.session.user == "Guest":
 		frappe.throw("Login required.", frappe.PermissionError)
 	if not _action_queue_table_ready():
-		return {"ok": True, "pending_approval_count": 0}
-	count = frappe.db.count(_ACTION_QUEUE_DOCTYPE, filters={"status": "Pending Approval"})
-	return {"ok": True, "pending_approval_count": int(count)}
+		return {"ok": True, "pending_approval_count": 0
+	}
+	count = frappe.db.count(_ACTION_QUEUE_DOCTYPE, filters={"status": "Pending Approval"
+	})
+	return {"ok": True, "pending_approval_count": int(count)
+	}
 
 
 @frappe.whitelist(methods=["POST"])
@@ -484,7 +510,7 @@ def run_governance_cycle(auto_approve: int | str = 0, execute_dry_run: int | str
 		"queued": queued,
 		"executed": executed,
 		"queue_kpis": _queue_kpis(),
-		"dashboard": dashboard,
+		"dashboard": dashboard
 	}
 
 
@@ -499,7 +525,8 @@ def get_ops_dashboard_payload():
 	else:
 		pending_actions = frappe.get_all(
 			_ACTION_QUEUE_DOCTYPE,
-			filters={"status": "Pending Approval"},
+			filters={"status": "Pending Approval"
+	},
 			fields=["name", "title", "priority", "source", "creation"],
 			order_by="creation asc",
 			limit=20,
@@ -508,7 +535,7 @@ def get_ops_dashboard_payload():
 		"ok": True,
 		"queue_kpis": _queue_kpis(),
 		"dashboard": dashboard,
-		"pending_actions": pending_actions,
+		"pending_actions": pending_actions
 	}
 @frappe.whitelist()
 def preview_infra_kpi(scenario: str | None = None, params: str | None = None) -> dict:

@@ -29,7 +29,8 @@ def _safe_count(doctype: str) -> int:
 def _upsert_signal(signal_type: str, title: str, severity: str, workspace: str, evidence_json: str):
 	name = frappe.db.get_value(
 		"Intelligence Signal",
-		{"signal_type": signal_type, "title": title},
+		{"signal_type": signal_type, "title": title
+	},
 		"name",
 	)
 	values = {
@@ -37,7 +38,7 @@ def _upsert_signal(signal_type: str, title: str, severity: str, workspace: str, 
 		"title": title,
 		"severity": severity,
 		"workspace": workspace,
-		"evidence_json": evidence_json,
+		"evidence_json": evidence_json
 	}
 	if name:
 		# Use db update to avoid optimistic-lock collisions during migrate hooks.
@@ -49,14 +50,15 @@ def _upsert_signal(signal_type: str, title: str, severity: str, workspace: str, 
 
 
 def _upsert_recommendation(title: str, reason: str, expected_impact: str, confidence: float, action_route: str):
-	name = frappe.db.get_value("Intelligence Recommendation", {"title": title}, "name")
+	name = frappe.db.get_value("Intelligence Recommendation", {"title": title
+	}, "name")
 	values = {
 		"title": title,
 		"reason": reason,
 		"expected_impact": expected_impact,
 		"confidence": confidence,
 		"action_route": action_route,
-		"status": "New",
+		"status": "New"
 	}
 	if name:
 		# Use db update to avoid optimistic-lock collisions during migrate hooks.
@@ -70,7 +72,8 @@ def _upsert_recommendation(title: str, reason: str, expected_impact: str, confid
 def _upsert_prediction(metric: str, horizon_days: int, predicted_value: float, confidence: float, basis_note: str):
 	name = frappe.db.get_value(
 		"Prediction Snapshot",
-		{"metric": metric, "horizon_days": horizon_days},
+		{"metric": metric, "horizon_days": horizon_days
+	},
 		"name",
 	)
 	values = {
@@ -78,7 +81,7 @@ def _upsert_prediction(metric: str, horizon_days: int, predicted_value: float, c
 		"horizon_days": horizon_days,
 		"predicted_value": float(predicted_value or 0),
 		"confidence": float(confidence or 0),
-		"basis_note": basis_note,
+		"basis_note": basis_note
 	}
 	if name:
 		# Use db update to avoid optimistic-lock collisions during migrate hooks.
@@ -118,7 +121,8 @@ def _forecast_revenue_30d() -> tuple[float, float, str]:
 		from `tabSales Invoice`
 		where docstatus = 1 and posting_date >= %(from_dt)s
 		""",
-		{"from_dt": from_dt},
+		{"from_dt": from_dt
+	},
 		as_dict=True,
 	)
 	total = float((rows[0] or {}).get("total") or 0)
@@ -145,7 +149,8 @@ def _forecast_cashflow_30d() -> tuple[float, float, str, int]:
 			coalesce((select count(*) from `tabSales Invoice` where docstatus = 1 and posting_date >= %(from_dt)s), 0) as si_cnt,
 			coalesce((select count(*) from `tabPurchase Invoice` where docstatus = 1 and posting_date >= %(from_dt)s), 0) as pi_cnt
 		""",
-		{"from_dt": from_dt},
+		{"from_dt": from_dt
+	},
 		as_dict=True,
 	)
 	row = rows[0] if rows else {}
@@ -171,7 +176,8 @@ def _forecast_inventory_pressure_30d() -> tuple[float, float, str, int]:
 			coalesce((select count(*) from `tabSales Invoice` where docstatus = 1 and posting_date >= %(from_dt)s), 0) as demand_docs,
 			coalesce((select count(*) from `tabPurchase Invoice` where docstatus = 1 and posting_date >= %(from_dt)s), 0) as supply_docs
 		""",
-		{"from_dt": from_dt},
+		{"from_dt": from_dt
+	},
 		as_dict=True,
 	)
 	row = rows[0] if rows else {}
@@ -345,8 +351,8 @@ def run_core_analyzers() -> dict:
 		recommendations,
 		{
 			"cashflow_30d": cf_pred,
-			"inventory_pressure_30d": ip_pred,
-		},
+			"inventory_pressure_30d": ip_pred
+	},
 	)
 
 	return {
@@ -355,6 +361,5 @@ def run_core_analyzers() -> dict:
 		"predictions_created_or_updated": len(predictions),
 		"signal_ids": signals,
 		"recommendation_ids": recommendations,
-		"prediction_ids": predictions,
+		"prediction_ids": predictions
 	}
-

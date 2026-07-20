@@ -24,7 +24,7 @@ def _predict_cashflow_30d(company: str) -> dict:
 		"horizon_days": 30,
 		"predicted_value": predicted,
 		"confidence": 0.55 if abs(daily) > 0 else 0.35,
-		"basis_note": "90-day JE net run-rate (heuristic MVP)",
+		"basis_note": "90-day JE net run-rate (heuristic MVP)"
 	}
 
 
@@ -35,7 +35,8 @@ def _predict_collections_30d(company: str) -> dict:
 		FROM `tabSales Invoice`
 		WHERE company = %(company)s AND docstatus = 1 AND outstanding_amount > 0
 		""",
-		{"company": company},
+		{"company": company
+	},
 	)[0][0]
 	predicted = flt(ar) * 0.25
 	return {
@@ -43,7 +44,7 @@ def _predict_collections_30d(company: str) -> dict:
 		"horizon_days": 30,
 		"predicted_value": predicted,
 		"confidence": 0.5,
-		"basis_note": "25% of open AR (heuristic MVP)",
+		"basis_note": "25% of open AR (heuristic MVP)"
 	}
 
 
@@ -58,7 +59,7 @@ def predict_finance_metrics(company: str) -> dict:
 			_predict_cashflow_30d(company),
 			_predict_collections_30d(company),
 		],
-		"disclaimer": "Heuristic MVP — not audited forecast. Human approval required for actions.",
+		"disclaimer": "Heuristic MVP — not audited forecast. Human approval required for actions."
 	}
 
 
@@ -79,7 +80,7 @@ def ask_finance_assistant(company: str, question: str, from_date: str | None = N
 		"question": question,
 		"answer": answer,
 		"source": "finance_data_mart",
-		"safety": {"mode": "read_only", "human_approval_required_for_actions": True},
+		"safety": {"mode": "read_only", "human_approval_required_for_actions": True}
 	}
 
 

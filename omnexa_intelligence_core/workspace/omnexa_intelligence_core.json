@@ -1,0 +1,128 @@
+{
+    "name": "Omnexa Intelligence Core",
+    "module": "ErpGenEx Intelligence Core",
+    "category": "Modules",
+    "public": 1,
+    "is_hidden": 0,
+    "links": [
+        {
+            "label": "Omnexa Intelligence Core List",
+            "name": "omnexa_intelligence_core",
+            "type": "List",
+            "link_to": "omnexa_intelligence_core",
+            "onboard": 1
+        },
+        {
+            "label": "Omnexa Intelligence Core Dashboard",
+            "name": "omnexa_intelligence_core_dashboard",
+            "type": "Dashboard",
+            "link_to": "omnexa_intelligence_core_dashboard",
+            "onboard": 1
+        }
+    ],
+    "shortcuts": [],
+    "number_cards": [
+        {
+            "label": "Total Records",
+            "number_card_name": "omnexa_intelligence_core_total_records",
+            "number_card_doc_type": "Number Card",
+            "is_standard": 1
+        },
+        {
+            "label": "Active Items",
+            "number_card_name": "omnexa_intelligence_core_active_items",
+            "number_card_doc_type": "Number Card",
+            "is_standard": 1
+        },
+        {
+            "label": "Pending Actions",
+            "number_card_name": "omnexa_intelligence_core_pending_actions",
+            "number_card_doc_type": "Number Card",
+            "is_standard": 1
+        },
+        {
+            "label": "Completed Tasks",
+            "number_card_name": "omnexa_intelligence_core_completed_tasks",
+            "number_card_doc_type": "Number Card",
+            "is_standard": 1
+        }
+    ],
+    "charts": [
+        {
+            "label": "Monthly Activity",
+            "chart_name": "omnexa_intelligence_core_monthly_activity",
+            "chart_type": "Line",
+            "is_standard": 1
+        },
+        {
+            "label": "Status Distribution",
+            "chart_name": "omnexa_intelligence_core_status_distribution",
+            "chart_type": "Pie",
+            "is_standard": 1
+        },
+        {
+            "label": "Performance Metrics",
+            "chart_name": "omnexa_intelligence_core_performance_metrics",
+            "chart_type": "Bar",
+            "is_standard": 1
+        }
+    ],
+    "reports": [
+        {
+            "label": "Omnexa Intelligence Core Report",
+            "name": "omnexa_intelligence_core_report",
+            "type": "Report",
+            "is_standard": 1
+        },
+        {
+            "label": "Summary Report",
+            "name": "omnexa_intelligence_core_summary_report",
+            "type": "Report",
+            "is_standard": 1
+        },
+        {
+            "label": "Detailed Analysis",
+            "name": "omnexa_intelligence_core_detailed_analysis",
+            "type": "Report",
+            "is_standard": 1
+        },
+        {
+            "label": "Performance Report",
+            "name": "omnexa_intelligence_core_performance_report",
+            "type": "Report",
+            "is_standard": 1
+        }
+    ],
+    "operations": [
+        {
+            "label": "Create Omnexa Intelligence Core",
+            "name": "create_omnexa_intelligence_core",
+            "type": "Action",
+            "is_standard": 1
+        },
+        {
+            "label": "Import Data",
+            "name": "import_omnexa_intelligence_core_data",
+            "type": "Action",
+            "is_standard": 1
+        },
+        {
+            "label": "Export Records",
+            "name": "export_omnexa_intelligence_core_records",
+            "type": "Action",
+            "is_standard": 1
+        },
+        {
+            "label": "Settings",
+            "name": "omnexa_intelligence_core_settings",
+            "type": "Action",
+            "is_standard": 1
+        },
+        {
+            "label": "Bulk Update",
+            "name": "bulk_update_omnexa_intelligence_core",
+            "type": "Action",
+            "is_standard": 1
+        }
+    ]
+}

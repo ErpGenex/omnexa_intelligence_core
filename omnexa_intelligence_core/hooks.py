@@ -47,11 +47,11 @@ app_include_js = [
 
 # include js in doctype views
 doctype_js = {
-	"Intelligence Action Queue": "public/js/intelligence_action_queue.js",
-}
+	"Intelligence Action Queue": "public/js/intelligence_action_queue.js"
+	}
 doctype_list_js = {
-	"Intelligence Action Queue": "public/js/intelligence_action_queue_list.js",
-}
+	"Intelligence Action Queue": "public/js/intelligence_action_queue_list.js"
+	}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
@@ -161,8 +161,7 @@ after_migrate = "omnexa_intelligence_core.install.after_migrate"
 scheduler_events = {
 	"hourly_long": [
 		"omnexa_intelligence_core.tasks.hourly_long",
-	],
-}
+	]}
 
 # Testing
 # -------
@@ -207,22 +206,22 @@ scheduler_events = {
 
 # user_data_fields = [
 # 	{
-# 		"doctype": "{doctype_1}",
-# 		"filter_by": "{filter_by}",
-# 		"redact_fields": ["{field_1}", "{field_2}"],
+# 		"doctype": "{}",
+# 		"filter_by": "{}",
+# 		"redact_fields": ["{}", "{}"],
 # 		"partial": 1,
 # 	},
 # 	{
-# 		"doctype": "{doctype_2}",
-# 		"filter_by": "{filter_by}",
+# 		"doctype": "{}",
+# 		"filter_by": "{}",
 # 		"partial": 1,
 # 	},
 # 	{
-# 		"doctype": "{doctype_3}",
+# 		"doctype": "{}",
 # 		"strict": False,
 # 	},
 # 	{
-# 		"doctype": "{doctype_4}"
+# 		"doctype": "{}"
 # 	}
 # ]
 
